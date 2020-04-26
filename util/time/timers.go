@@ -62,7 +62,7 @@ func (t *ScheduledExecution) Run() *ScheduledExecution {
 				if nil != timer {
 					timer.Stop()
 				}
-				t.gohlp.Done()
+				t.gohlp.Remove()
 				//fmt.Println("kill chan", t.name)
 				runtime.Goexit()
 			}

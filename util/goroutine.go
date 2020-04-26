@@ -2,7 +2,22 @@ package util
 
 import (
 	"sync"
+	"time"
 )
+
+type Context interface {
+	Deadline() (deadline time.Time, ok bool)
+	Done() <-chan struct{}
+	Err() error
+	Value(key interface{}) interface{}
+	Quit() bool
+	Add()
+	AddMany(delta int)
+	Wait()
+	Remove()
+	IsQuitting() bool
+	GetQuitChan() chan struct{}
+}
 
 type GoroutineHelper struct {
 	quitting bool
@@ -15,6 +30,22 @@ func NewGoroutineHelper() *GoroutineHelper {
 	g.quit = make(chan struct{})
 
 	return g
+}
+
+func (g *GoroutineHelper) Deadline() (deadline time.Time, ok bool) {
+	return
+}
+
+func (g *GoroutineHelper) Done() <-chan struct{} {
+	return g.quit
+}
+
+func (g *GoroutineHelper) Err() error {
+	return nil
+}
+
+func (g *GoroutineHelper) Value(key interface{}) interface{} {
+	return nil
 }
 
 func (g *GoroutineHelper) GetQuitChan() chan struct{} {
@@ -41,7 +72,7 @@ func (g *GoroutineHelper) Wait() {
 	g.wg.Wait()
 }
 
-func (g *GoroutineHelper) Done() {
+func (g *GoroutineHelper) Remove() {
 	g.wg.Done()
 }
 
